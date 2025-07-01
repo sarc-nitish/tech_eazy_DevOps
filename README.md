@@ -90,19 +90,5 @@ Confirmed via AWS Console with state `stopped`.
 
 ---
 
-## 📸 Screenshots for Submission
-
-* EC2 instance "Running" & "Stopped" views
-* Output webpage from browser
-* GitHub repo folder showing `scripts/`, `run.sh`, and `dev_config.json`
-
-### ✅ EC2 Auto Stop Verified
-![EC2 Stopped](resources/ec2-stopped.png)
-
-### ✅ Web Output from Apache Server
-![Web Output](resources/web-output.png)
-
-
----
 
 ## ✅ Project Status: COMPLETED
