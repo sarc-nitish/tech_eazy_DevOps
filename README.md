@@ -1,4 +1,4 @@
-# TechEazy DevOps Assignment - AWS EC2 Auto Deployment 🚀
+# TechEazy DevOps Assignment - AWS EC2 Auto Deployment 
 
 This project is automates the provisioning, deployment, and auto-shutdown of an EC2 instance using a Bash script and AWS CLI.
 
@@ -20,19 +20,19 @@ This project is automates the provisioning, deployment, and auto-shutdown of an 
 ```
 tech_eazy_DevOps/
 ├── README.md
-├── dev_config.json
-├── run.sh
 ├── scripts/
-│   └── deploy.sh
+│   ├── dev_config.json        # Configuration for EC2 instance
+│   └── deploy.sh              # Main auto-deployment Bash script
+├── run.sh                    # Apache HTTPD deploy script
 └── resources/
-    ├── ec2-stopped.png
-    └── web-output.png
+    ├── ec2-stopped.png       # Screenshot of EC2 instance stopped
+    └── web-output.png        # Screenshot of web server output
 
 ```
 
 ---
 
-## ⚙️ Configuration File (`dev_config.json`)
+##  Configuration File (`dev_config.json`)
 
 ```json
 {
@@ -48,16 +48,16 @@ Update this file as needed before running the script.
 
 ---
 
-## 🚀 Deployment Instructions
+##  Deployment Instructions
 
-### 🔧 1. Prerequisites
+###  1. Prerequisites
 
 * AWS CLI installed and configured (`aws configure`)
 * `jq` installed (for parsing JSON)
 * Git Bash or any Linux shell
 * Valid EC2 key pair (`.pem` file placed in `~/.ssh/`)
 
-### 🚀 2. Run Deployment
+###  2. Run Deployment
 
 ```bash
 cd tech_eazy_DevOps/scripts
@@ -67,7 +67,7 @@ chmod +x deploy.sh
 
 ---
 
-## 🌐 Expected Output
+##  Expected Output
 
 When browser opens this:
 
@@ -83,7 +83,7 @@ You should see:
 
 ---
 
-## 🔒 Auto-Stop Confirmation
+##  Auto-Stop Confirmation
 
 After script execution, EC2 instance stops automatically:
 
