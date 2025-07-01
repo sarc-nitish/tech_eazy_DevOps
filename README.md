@@ -19,10 +19,15 @@ This project is automates the provisioning, deployment, and auto-shutdown of an 
 
 ```
 tech_eazy_DevOps/
-├── dev_config.json        # Configuration for EC2 instance
-├── run.sh                 # Apache HTTPD deploy script
-└── scripts/
-    └── deploy.sh          # Main auto-deployment Bash script
+├── README.md
+├── dev_config.json
+├── run.sh
+├── scripts/
+│   └── deploy.sh
+└── resources/
+    ├── ec2-stopped.png
+    └── web-output.png
+
 ```
 
 ---
@@ -89,6 +94,15 @@ aws ec2 stop-instances --instance-ids <instance-id> --region <region>
 Confirmed via AWS Console with state `stopped`.
 
 ---
+## 📸 Screenshots for Submission
 
+* EC2 instance "Running" & "Stopped" views
+* Output webpage from browser
+* GitHub repo folder showing `scripts/`, `run.sh`, and `dev_config.json`
+* ### ✅ EC2 Auto Stop Verified
+![EC2 Stopped](resources/ec2-stopped.png)
+
+### ✅ Web Output from Apache Server
+![Web Output](resources/web-output.png)
 
 ## ✅ Project Status: COMPLETED
