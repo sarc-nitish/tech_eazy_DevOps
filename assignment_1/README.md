@@ -1,37 +1,73 @@
-# TechEazy DevOps Assignment - AWS EC2 Auto Deployment 🚀
+# Assignment 1 - EC2 Auto Deployment with Apache Web Server
 
-This project is part of the **TechEazy Consulting Internship (July 5th - Aug 4th)** and automates the provisioning, deployment, and auto-shutdown of an EC2 instance using a Bash script and AWS CLI.
+##  Objective
 
----
-
-## ✅ Features
-
-* Launches EC2 instance using configurable JSON
-* Installs Git, Java, and HTTPD automatically
-* Clones a GitHub repository containing the app
-* Starts a basic Apache web server
-* Returns a web page message: `Deployed from GitHub via AWS CLI 🚀`
-* Automatically stops the EC2 instance after successful deployment
+Automate the provisioning of an EC2 instance and deploy a basic web server that serves an HTML response using a Bash script and AWS CLI.
 
 ---
 
-## 📁 Folder Structure
+##  Tech Stack
+
+* **AWS EC2**
+* **Amazon Linux 2023**
+* **AWS CLI**
+* **Bash Script**
+* **Git**
+* **Apache HTTPD**
+
+---
+
+##  Folder Structure
 
 ```
-tech_eazy_DevOps/
-├── README.md
+assignment_1/
+├── README.md                 
+├── run.sh                     <- Starts Apache server and shows success message
+├── resources/                 <- Screenshots for proof
+│   ├── ec2-stopped.png
+│   ├── web-output.png
 ├── scripts/
-│   ├── dev_config.json        # Configuration for EC2 instance
-│   └── deploy.sh              # Main auto-deployment Bash script
-├── run.sh                    # Apache HTTPD deploy script
-└── resources/
-    ├── ec2-stopped.png       # Screenshot of EC2 instance stopped
-    └── web-output.png        # Screenshot of web server output
+│   ├── deploy.sh              <- Bash script to launch EC2, deploy code, stop EC2
+│   └── dev_config.json        <- Configuration for EC2 instance (instance_type, region, key_name, etc.)
 ```
 
 ---
 
-## ⚙️ Configuration File (`scripts/dev_config.json`)
+##  Execution Flow
+
+1. `deploy.sh` runs via Bash from local system
+2. Checks if a stopped EC2 instance exists
+
+   * If **yes**, it starts and reuses it
+   * If **no**, it launches a new one
+3. SSH into EC2, installs Apache & deploys HTML message
+4. Shuts down the EC2 instance automatically
+
+---
+
+##  How to Run
+
+Make sure:
+
+* AWS CLI is configured (`aws configure`)
+* Your `.pem` key is in `~/.ssh/`
+
+```bash
+cd assignment_1/scripts
+chmod +x deploy.sh
+./deploy.sh ../scripts/dev_config.json
+```
+
+---
+
+##  Proof (Inside `resources/` folder)
+
+* `web-output.png`: Webpage deployed from EC2 with Apache
+* `ec2-stopped.png`: Shows EC2 instance stopped after deployment
+
+---
+
+##  dev\_config.json Sample
 
 ```json
 {
@@ -43,84 +79,36 @@ tech_eazy_DevOps/
 }
 ```
 
-Update this file as needed before running the script.
+---
+
+##  Features
+
+* Reuse stopped EC2 instance
+* Fully automated: launch → deploy → stop
+* Serverless cost-saving: instance shuts down post-deployment
 
 ---
 
-## 🚀 Deployment Instructions
+##  Tested On
 
-### 🔧 1. Prerequisites
-
-* AWS CLI installed and configured (`aws configure`)
-* `jq` installed (for parsing JSON)
-* Git Bash or any Linux shell
-* Valid EC2 key pair (`.pem` file placed in `~/.ssh/`)
-
-### 🚀 2. Run Deployment
-
-```bash
-cd tech_eazy_DevOps/scripts
-chmod +x deploy.sh
-./deploy.sh dev_config.json
-```
+* Git Bash on Windows 10
+* Amazon Linux 2023 AMI
+* AWS Free Tier (t3.micro)
 
 ---
 
-## 🌐 Expected Output
+##  Output Sample
 
-When browser opens this:
+Webpage displays:
 
 ```
-http://<public-ip>
-```
-
-You should see:
-
-```html
 <h1>Deployed from GitHub via AWS CLI 🚀</h1>
 ```
 
 ---
 
-## 🔐 Auto-Stop Confirmation
+##  End
 
-After script execution, EC2 instance stops automatically:
-
-```bash
-aws ec2 stop-instances --instance-ids <instance-id> --region <region>
-```
-
-Confirmed via AWS Console with state `stopped`.
+This project showcases basic automation using AWS CLI and Bash scripting. Great for beginner-level DevOps practice.
 
 ---
-
-## 💼 Screenshots for Submission
-
-### ✅ EC2 Auto Stop Verified
-
-![EC2 Stopped](resources/ec2-stopped.png)
-
-### ✅ Web Output from Apache Server
-
-![Web Output](resources/web-output.png)
-
----
-
-## 📌 Submission Link
-
-[Submit via Google Form](https://forms.gle/c9BwEkpoqimWTkZv5)
-
-> ⚠️ **Ensure that AWS credentials are NEVER pushed to GitHub.**
-
----
-
-## 👤 Author
-
-* **Name**: Sarc Nitish
-* **GitHub**: [sarc-nitish](https://github.com/sarc-nitish)
-* **Internship**: TechEazy Consulting
-* **Track**: DevOps
-
----
-
-## ✅ Project Status: COMPLETED
