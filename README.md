@@ -66,7 +66,7 @@ tech_eazy_DevOps/
 - Git & GitHub
 
 ---
-
+"Testing Pull Request from master branch"
 ## PR Submission
 
 ✅ All tasks tested with real EC2 instances  
@@ -74,3 +74,4 @@ tech_eazy_DevOps/
 ✅ Folder structure clean and documented  
 ✅ Pull Request raised via `pr` branch 
 
+"Testing Pull Request from master branch"
