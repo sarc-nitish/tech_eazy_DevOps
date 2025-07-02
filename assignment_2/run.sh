@@ -11,3 +11,6 @@ echo "<h1>Deployed from GitHub via AWS CLI 🚀</h1>" | sudo tee /var/www/html/i
 # Trigger upload logs (shutdown)
 sudo chmod +x scripts/shutdown_upload.sh
 scripts/shutdown_upload.sh
+
+CONFIG_PATH="./configs/s3_config.json"
+
