@@ -7,6 +7,7 @@ AMI_ID=$(echo "$CONFIG" | jq -r '.ami_id')
 REGION=$(echo "$CONFIG" | jq -r '.region')
 KEY_NAME=$(echo "$CONFIG" | jq -r '.key_name')
 REPO_URL=$(echo "$CONFIG" | jq -r '.repo_url')
+INSTANCE_PROFILE_NAME="EC2S3UploadProfile"
 
 echo "🔄 Checking for existing instance..."
 INSTANCE_ID=$(aws ec2 describe-instances \
@@ -25,6 +26,7 @@ if [[ "$INSTANCE_ID" == "None" || -z "$INSTANCE_ID" ]]; then
     --count 1 \
     --instance-type "$INSTANCE_TYPE" \
     --key-name "$KEY_NAME" \
+    --iam-instance-profile Name=$INSTANCE_PROFILE_NAME \
     --region "$REGION" \
     --query 'Instances[0].InstanceId' \
     --output text)
@@ -64,7 +66,7 @@ ssh -o StrictHostKeyChecking=no -i "$HOME/.ssh/$KEY_NAME.pem" ec2-user@$PUBLIC_I
   sudo yum install httpd -y
   rm -rf tech_eazy_DevOps
   git clone $REPO_URL
-  cd tech_eazy_DevOps
+  cd tech_eazy_DevOps/assignment_2
   chmod +x run.sh
   ./run.sh
 EOF
