@@ -1,12 +1,6 @@
 #!/bin/bash
 
-# Load config
 CONFIG_FILE=$1
-if [ -z "$CONFIG_FILE" ]; then
-  echo "Usage: ./deploy.sh dev_config.json"
-  exit 1
-fi
-
 CONFIG=$(cat $CONFIG_FILE)
 INSTANCE_TYPE=$(echo $CONFIG | jq -r '.instance_type')
 AMI_ID=$(echo $CONFIG | jq -r '.ami_id')
@@ -14,40 +8,56 @@ REGION=$(echo $CONFIG | jq -r '.region')
 KEY_NAME=$(echo $CONFIG | jq -r '.key_name')
 REPO_URL=$(echo $CONFIG | jq -r '.repo_url')
 
-# Step 1: Launch EC2
-echo "Launching EC2..."
-INSTANCE_ID=$(aws ec2 run-instances \
-  --image-id $AMI_ID \
-  --instance-type $INSTANCE_TYPE \
-  --key-name $KEY_NAME \
-  --region $REGION \
-  --security-groups default \
-  --query 'Instances[0].InstanceId' \
+echo "🔄 Checking for existing stopped instance..."
+INSTANCE_ID=$(aws ec2 describe-instances \
+  --filters "Name=instance-state-name,Values=stopped" \
+            "Name=instance-type,Values=$INSTANCE_TYPE" \
+            "Name=image-id,Values=$AMI_ID" \
+            "Name=key-name,Values=$KEY_NAME" \
+  --region "$REGION" \
+  --query "Reservations[0].Instances[0].InstanceId" \
   --output text)
 
-echo "Instance launched: $INSTANCE_ID"
+if [[ "$INSTANCE_ID" == "None" || -z "$INSTANCE_ID" ]]; then
+  echo "📦 No stopped instance found. Launching new EC2..."
+  INSTANCE_ID=$(aws ec2 run-instances \
+    --image-id "$AMI_ID" \
+    --count 1 \
+    --instance-type "$INSTANCE_TYPE" \
+    --key-name "$KEY_NAME" \
+    --region "$REGION" \
+    --query 'Instances[0].InstanceId' \
+    --output text)
+else
+  echo "♻️ Reusing stopped instance: $INSTANCE_ID"
+  aws ec2 start-instances --instance-ids "$INSTANCE_ID" --region "$REGION" > /dev/null
+fi
 
-# Wait for running
-aws ec2 wait instance-running --instance-ids $INSTANCE_ID --region $REGION
+echo "⏳ Waiting for instance to be running..."
+aws ec2 wait instance-running --instance-ids "$INSTANCE_ID" --region "$REGION"
 
-# Get public IP
 PUBLIC_IP=$(aws ec2 describe-instances \
-  --instance-ids $INSTANCE_ID \
-  --region $REGION \
+  --instance-ids "$INSTANCE_ID" \
+  --region "$REGION" \
   --query 'Reservations[0].Instances[0].PublicIpAddress' \
   --output text)
 
-echo "Public IP: $PUBLIC_IP"
+echo "🌐 Public IP: $PUBLIC_IP"
 
-# SSH into EC2 and deploy app
-ssh -o StrictHostKeyChecking=no -i "~/.ssh/$KEY_NAME.pem" ec2-user@$PUBLIC_IP << EOF
+echo "🔧 Running remote deployment script..."
+ssh -o StrictHostKeyChecking=no -i "$HOME/.ssh/$KEY_NAME.pem" ec2-user@$PUBLIC_IP <<EOF
   sudo yum update -y
-  sudo yum install git java-21-amazon-corretto -y
+  sudo yum install git -y
+  sudo yum install java-21-amazon-corretto -y
+  sudo yum install httpd -y
+  rm -rf tech_eazy_DevOps
   git clone $REPO_URL
-  cd techeazy-devops
+  cd tech_eazy_DevOps
   chmod +x run.sh
   ./run.sh
 EOF
 
-# Stop EC2 after 2 hrs
-aws ec2 stop-instances --instance-ids $INSTANCE_ID --region $REGION
+echo "🛑 Stopping EC2 instance: $INSTANCE_ID"
+aws ec2 stop-instances --instance-ids "$INSTANCE_ID" --region "$REGION"
+
+echo "✅ Deployment complete. Instance stopped."
