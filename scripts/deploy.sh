@@ -1,25 +1,25 @@
 #!/bin/bash
 
 CONFIG_FILE=$1
-CONFIG=$(cat $CONFIG_FILE)
-INSTANCE_TYPE=$(echo $CONFIG | jq -r '.instance_type')
-AMI_ID=$(echo $CONFIG | jq -r '.ami_id')
-REGION=$(echo $CONFIG | jq -r '.region')
-KEY_NAME=$(echo $CONFIG | jq -r '.key_name')
-REPO_URL=$(echo $CONFIG | jq -r '.repo_url')
+CONFIG=$(cat "$CONFIG_FILE")
+INSTANCE_TYPE=$(echo "$CONFIG" | jq -r '.instance_type')
+AMI_ID=$(echo "$CONFIG" | jq -r '.ami_id')
+REGION=$(echo "$CONFIG" | jq -r '.region')
+KEY_NAME=$(echo "$CONFIG" | jq -r '.key_name')
+REPO_URL=$(echo "$CONFIG" | jq -r '.repo_url')
 
-echo "🔄 Checking for existing stopped instance..."
+echo "🔄 Checking for existing instance..."
 INSTANCE_ID=$(aws ec2 describe-instances \
-  --filters "Name=instance-state-name,Values=stopped" \
-            "Name=instance-type,Values=$INSTANCE_TYPE" \
-            "Name=image-id,Values=$AMI_ID" \
-            "Name=key-name,Values=$KEY_NAME" \
+  --filters "Name=instance-type,Values=$INSTANCE_TYPE" \
+           "Name=image-id,Values=$AMI_ID" \
+           "Name=key-name,Values=$KEY_NAME" \
+           "Name=instance-state-name,Values=running,stopped" \
   --region "$REGION" \
   --query "Reservations[0].Instances[0].InstanceId" \
   --output text)
 
 if [[ "$INSTANCE_ID" == "None" || -z "$INSTANCE_ID" ]]; then
-  echo "📦 No stopped instance found. Launching new EC2..."
+  echo "📦 No existing instance found. Launching new EC2..."
   INSTANCE_ID=$(aws ec2 run-instances \
     --image-id "$AMI_ID" \
     --count 1 \
@@ -29,7 +29,19 @@ if [[ "$INSTANCE_ID" == "None" || -z "$INSTANCE_ID" ]]; then
     --query 'Instances[0].InstanceId' \
     --output text)
 else
-  echo "♻️ Reusing stopped instance: $INSTANCE_ID"
+  STATE=$(aws ec2 describe-instances \
+    --instance-ids "$INSTANCE_ID" \
+    --region "$REGION" \
+    --query 'Reservations[0].Instances[0].State.Name' \
+    --output text)
+
+  if [[ "$STATE" == "running" ]]; then
+    echo "🛑 Instance is running. Stopping instance: $INSTANCE_ID"
+    aws ec2 stop-instances --instance-ids "$INSTANCE_ID" --region "$REGION"
+    aws ec2 wait instance-stopped --instance-ids "$INSTANCE_ID" --region "$REGION"
+  fi
+
+  echo "♻️ Reusing instance: $INSTANCE_ID"
   aws ec2 start-instances --instance-ids "$INSTANCE_ID" --region "$REGION" > /dev/null
 fi
 
@@ -59,5 +71,4 @@ EOF
 
 echo "🛑 Stopping EC2 instance: $INSTANCE_ID"
 aws ec2 stop-instances --instance-ids "$INSTANCE_ID" --region "$REGION"
-
 echo "✅ Deployment complete. Instance stopped."
