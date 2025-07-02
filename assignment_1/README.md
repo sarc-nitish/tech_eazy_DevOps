@@ -62,8 +62,11 @@ chmod +x deploy.sh
 
 ##  Proof (Inside `resources/` folder)
 
-* `web-output.png`: Webpage deployed from EC2 with Apache
-* `ec2-stopped.png`: Shows EC2 instance stopped after deployment
+####  Shows EC2 instance stopped after deployment
+<img src="resources/ec2-stopped.png" alt="EC2 Stopped" width="400"/>
+
+####  Webpage deployed from EC2 with Apache
+<img src="resources/web-output.png" alt="Web Output" width="400"/>
 
 ---
 
@@ -73,7 +76,7 @@ chmod +x deploy.sh
 {
   "instance_type": "t3.micro",
   "region": "eu-north-1",
-  "ami_id": "ami-0c406d4a4a22634fd",
+  "ami_id": "ami-< ______>",
   "key_name": "techeazy-key",
   "repo_url": "https://github.com/sarc-nitish/tech_eazy_DevOps.git"
 }
