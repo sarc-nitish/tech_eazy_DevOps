@@ -112,7 +112,7 @@ chmod +x deploy.sh
 
 ---
 
-## 🔗 Example Run
+##  Example Run
 
 ```bash
 ./scripts/deploy.sh ./configs/dev_config.json
@@ -120,4 +120,4 @@ chmod +x deploy.sh
 
 ---
 
-Thanks 🙌
+Thanks 
