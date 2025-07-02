@@ -86,11 +86,16 @@ chmod +x deploy.sh
 
 ---
 
-##  Screenshots
+###  Screenshots
 
-* `resources/ec2-stopped.png` → EC2 successfully stopped after task
-* `resources/web-output.png` → Apache running with custom page
-* `resources/s3-logs-proof.png` → Log file visible in S3
+####  EC2 Instance Stopped
+<img src="resources/ec2-stopped.png" alt="EC2 Stopped" width="400"/>
+
+####  Apache Server Output
+<img src="resources/web-output.png" alt="Web Output" width="400"/>
+
+####  S3 Log Upload Proof
+<img src="resources/s3-logs-proof.png" alt="S3 Logs Proof" width="400"/>
 
 ---
 
