@@ -95,7 +95,7 @@ chmod +x deploy.sh
 <img src="resources/web-output.png" alt="Web Output" width="400"/>
 
 ####  S3 Log Upload Proof
-<img src="resources/s3-logs-proof.png" alt="S3 Logs Proof" width="00"/>
+<img src="resources/s3-logs-proof.png" alt="Web Output" width="400"/>
 
 ---
 
