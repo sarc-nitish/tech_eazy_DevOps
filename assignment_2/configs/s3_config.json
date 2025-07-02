@@ -1,4 +1,5 @@
 {
-  "bucket_name": "techeazy-devops-logs-yourname",
+  "bucket_name": "your-bucket-name",
+  "s3_object": "logs/proof.txt",
   "region": "eu-north-1"
 }
