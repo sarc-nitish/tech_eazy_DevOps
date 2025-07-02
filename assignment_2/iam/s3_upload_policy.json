@@ -9,8 +9,8 @@
         "s3:ListBucket"
       ],
       "Resource": [
-        "arn:aws:s3:::techeazy-devops-logs-*",
-        "arn:aws:s3:::techeazy-devops-logs-*/*"
+        "arn:aws:s3:::techeazy-devops-logs-001",
+        "arn:aws:s3:::techeazy-devops-logs-001/*"
       ]
     }
   ]
