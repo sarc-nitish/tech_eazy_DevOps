@@ -2,7 +2,7 @@
 
 ##  Objective:
 
-Automate the following tasks:
+Automate the following tasks :
 
 * Launch EC2 instance using AWS CLI
 * Attach IAM role to allow EC2 to upload logs to S3
