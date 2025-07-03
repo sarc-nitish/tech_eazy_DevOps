@@ -66,12 +66,12 @@ tech_eazy_DevOps/
 - Git & GitHub
 
 ---
-"Testing Pull Request from master branch"
+
 ## PR Submission
 
-✅ All tasks tested with real EC2 instances  
-✅ Logs uploaded successfully to S3  
-✅ Folder structure clean and documented  
-✅ Pull Request raised via `pr` branch 
+ All tasks tested with real EC2 instances  
+ Logs uploaded successfully to S3  
+ Folder structure clean and documented  
+ Pull Request raised via `pr` branch → merged into `main`
 
-"Testing Pull Request from master branch"
+ Testing Pull Request from `main` branch
