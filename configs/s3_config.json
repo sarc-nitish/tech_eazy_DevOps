@@ -1,0 +1,5 @@
+{
+  "bucket_name": "techeazy-s3-bucket",
+  "s3_object": "logs/proof.txt",
+  "region": "eu-north-1"
+}
