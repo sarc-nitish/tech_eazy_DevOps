@@ -132,7 +132,7 @@ chmod +x deploy.sh
 
 ##  Final Notes
 
- Both assignments completed and tested
+ Both assignments completed and tested.
  Auto-stop and cost-saving handled
  Log successfully pushed to S3
  Follows single-folder structure as per mentor’s guidance
