@@ -51,8 +51,11 @@ chmod +x deploy.sh
 
 🗁 Proof in `resources/`:
 
-* `ec2-stopped.png`
-* `web-output.png`
+####  EC2 Instance Stopped
+<img src="resources/ec2-stopped.png" alt="EC2 Stopped" width="400"/>
+
+####  Apache Server Output
+<img src="resources/web-output.png" alt="Web Output" width="400"/>
 
 ---
 
@@ -89,7 +92,8 @@ chmod +x deploy.sh
 
  `resources/` folder:
 
-* `s3-logs-proof.png` confirms S3 upload
+####  S3 Log Upload Proof
+<img src="resources/s3-logs-proof.png" alt="Web Output" width="400"/>
 
 ---
 
