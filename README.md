@@ -28,7 +28,7 @@ techeazy_DevOps/
 
 ---
 
-##  Assignment 1 – EC2 Auto Deployment
+#  Assignment 1 – EC2 Auto Deployment
 
 ###  Objective:
 
@@ -41,13 +41,31 @@ Deploy a basic Apache web server using Bash and AWS CLI on an EC2 instance.
 * Serve HTML from GitHub
 * Auto stop the EC2 instance
 
-### ▶ Run:
+  ##  Execution Flow
+
+1. `deploy.sh` runs via Bash from local system
+2. Checks if a stopped EC2 instance exists
+
+   * If **yes**, it starts and reuses it
+   * If **no**, it launches a new one
+3. SSH into EC2, installs Apache & deploys HTML message
+4. Shuts down the EC2 instance automatically
+
+---
+
+##  How to Run
+
+Make sure:
+
+* AWS CLI is configured (`aws configure`)
+* Your `.pem` key is in `~/.ssh/`
 
 ```bash
 cd scripts
 chmod +x deploy.sh
 ./deploy.sh ./configs/dev_config.json
 ```
+
 
 🗁 Proof in `resources/`:
 
@@ -59,7 +77,7 @@ chmod +x deploy.sh
 
 ---
 
-##  Assignment 2 – IAM Role + S3 Automation
+#  Assignment 2 – IAM Role + S3 Automation
 
 ###  Objective:
 
@@ -80,15 +98,54 @@ Go to **EC2 → Actions → Security → Modify IAM Role → EC2S3UploadProfile*
 
 #### 2️ Deploy & Upload Logs
 
+##  Step-by-step Execution
+
+###  1. IAM Role and Policy Setup
+
+```bash
+cd iam
+chmod +x create_roles.sh
+./create_roles.sh
+```
+
+> This script will create:
+>
+> * IAM Role: `S3UploadRole`
+> * Instance Profile: `EC2S3UploadProfile`
+> * Attach policy from `s3_upload_policy.json`
+
+After this, manually attach `EC2S3UploadProfile` to your EC2 instance using AWS Console:
+
+> EC2 → Actions → Security → Modify IAM Role → Select `EC2S3UploadProfile`
+
+---
+
+###  2. Launch and Deploy EC2
+
 ```bash
 cd scripts
 chmod +x deploy.sh
 ./deploy.sh ./configs/dev_config.json
 ```
 
-* Runs `run.sh` via SSH
-* Logs uploaded to bucket defined in `s3_config.json`
-* EC2 instance auto-stops
+> This script will:
+>
+> * Reuse stopped EC2 or launch new instance
+> * SSH into EC2, install dependencies
+> * Clone GitHub repo
+> * Run `run.sh`
+> * Stop the instance automatically
+
+---
+
+###  3. run.sh Responsibilities
+
+* Starts Apache HTTPD server
+* Creates `deployment_log.txt`
+* Uploads log to bucket from `s3_config.json`
+* Outputs success message
+
+---
 
  `resources/` folder:
 
@@ -97,13 +154,29 @@ chmod +x deploy.sh
 
 ---
 
-##  IAM & S3 Notes
+##  Notes
 
-* Ensure S3 bucket exists before running
-* IAM role must allow `s3:PutObject`, `s3:ListBucket`
-* Use `jq` for parsing JSON in scripts
+* S3 bucket must be created **before** running `run.sh`
+* IAM role must have `s3:PutObject`, `s3:ListBucket` permissions
+* Use `jq` in your shell environment
 
 ---
+
+##  Submission Checklist
+
+* [x] `README.md` explains all steps clearly
+* [x] All scripts are executable (`chmod +x`)
+* [x] EC2 automatically stops after job
+* [x] Deployment log uploaded to correct bucket
+* [x] Folder structure follows assignment format
+
+---
+
+##  Example Run
+
+```bash
+./scripts/deploy.sh ./configs/dev_config.json
+```
 
 ##  Tested On
 
@@ -128,7 +201,6 @@ chmod +x deploy.sh
 }
 ```
 
----
 
 ##  Final Notes
 
