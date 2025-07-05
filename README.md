@@ -138,6 +138,3 @@ chmod +x deploy.sh
  Follows single-folder structure as per mentor’s guidance
 
 ---
-
-> PR raised via `pr` branch → Merged into `main`
-> Thank you TechEazy 
