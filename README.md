@@ -1,78 +1,140 @@
-# TechEazy DevOps Internship Assignments
+#  TechEazy DevOps Internship Assignments
 
-Welcome to my DevOps Internship Project Repository for **TechEazy Consulting**.
-
-This repository contains two major assignments completed during the internship, showcasing automation using **AWS CLI**, **EC2**, **S3**, **IAM**, and shell scripting.
+This repository contains **automated DevOps workflows** using AWS services (EC2, S3, IAM) built as part of the **TechEazy Consulting Internship**.
 
 ---
 
-## Repository Structure
+##  Project Structure
 
 ```
-tech_eazy_DevOps/
-├── README.md               
-├── assignment_1/           ← EC2 Auto Deployment
-│   ├── run.sh
-│   ├── README.md
-│   ├── scripts/
-│   └── resources/
-│       ├── ec2-stopped.png
-│       └── web-output.png
-│
-└── assignment_2/           ← EC2 + IAM + S3 Automation
-    ├── run.sh
-    ├── README.md
-    ├── configs/
-    ├── iam/
-    ├── scripts/
-    └── resources/
-        ├── ec2-stopped.png
-        ├── web-output.png
-        └── s3-logs-proof.png
+techeazy_DevOps/
+├── README.md
+├── run.sh
+├── scripts/
+│   ├── deploy.sh
+│   ├── shutdown_upload.sh
+├── configs/
+│   ├── dev_config.json
+│   ├── s3_config.json
+├── iam/
+│   ├── create_roles.sh
+│   ├── s3_read_policy.json
+│   └── s3_upload_policy.json
+├── resources/
+│   ├── ec2-stopped.png
+│   ├── web-output.png
+│   └── s3-logs-proof.png
 ```
 
 ---
 
-## Assignment 1 – EC2 Auto Deployment (Basic)
+##  Assignment 1 – EC2 Auto Deployment
 
-- Launch EC2 using `deploy.sh`
-- Install Apache server (`httpd`)
-- Display webpage with confirmation
-- Auto stop EC2 after task
-- Screenshots captured in `resources/`
+###  Objective:
 
- Go to: [assignment_1/](./assignment_1)
+Deploy a basic Apache web server using Bash and AWS CLI on an EC2 instance.
+
+###  Key Actions:
+
+* Reuse or launch EC2 instance
+* Install Apache server (httpd)
+* Serve HTML from GitHub
+* Auto stop the EC2 instance
+
+### ▶ Run:
+
+```bash
+cd scripts
+chmod +x deploy.sh
+./deploy.sh ./configs/dev_config.json
+```
+
+🗁 Proof in `resources/`:
+
+####  EC2 Instance Stopped
+<img src="resources/ec2-stopped.png" alt="EC2 Stopped" width="400"/>
+
+####  Apache Server Output
+<img src="resources/web-output.png" alt="Web Output" width="400"/>
+
+---
+
+##  Assignment 2 – IAM Role + S3 Automation
+
+###  Objective:
+
+Enhance previous task by uploading deployment logs to an S3 bucket using IAM roles.
+
+###  Steps:
+
+#### 1️ Create IAM Roles
+
+```bash
+cd iam
+chmod +x create_roles.sh
+./create_roles.sh
+```
+
+Manually attach IAM Role:
+Go to **EC2 → Actions → Security → Modify IAM Role → EC2S3UploadProfile**
+
+#### 2️ Deploy & Upload Logs
+
+```bash
+cd scripts
+chmod +x deploy.sh
+./deploy.sh ./configs/dev_config.json
+```
+
+* Runs `run.sh` via SSH
+* Logs uploaded to bucket defined in `s3_config.json`
+* EC2 instance auto-stops
+
+ `resources/` folder:
+
+####  S3 Log Upload Proof
+<img src="resources/s3-logs-proof.png" alt="Web Output" width="400"/>
 
 ---
 
-## Assignment 2 – IAM & S3 Log Upload (Advanced)
+##  IAM & S3 Notes
 
-- Create IAM Roles (Upload + Read)
-- Attach instance profile to EC2
-- Upload deployment logs to private S3 bucket
-- Auto stop EC2
-- Full lifecycle implemented via Bash
-
- Go to: [assignment_2/](./assignment_2)
+* Ensure S3 bucket exists before running
+* IAM role must allow `s3:PutObject`, `s3:ListBucket`
+* Use `jq` for parsing JSON in scripts
 
 ---
 
-##  Technologies Used
+##  Tested On
 
-- AWS EC2, IAM, S3
-- Amazon Linux 2023
-- Bash scripting
-- AWS CLI v2
-- Git & GitHub
+* Amazon Linux 2023 AMI
+* Git Bash on Windows
+* AWS CLI v2
+* EC2 (t3.micro, Free Tier)
 
 ---
-"Testing Pull Request from master branch"
-## PR Submission
 
-✅ All tasks tested with real EC2 instances  
-✅ Logs uploaded successfully to S3  
-✅ Folder structure clean and documented  
-✅ Pull Request raised via `pr` branch 
+##  Sample Configs
 
-"Testing Pull Request from master branch"
-🟢 Final restructuring PR submission
+### `configs/dev_config.json`
+
+```json
+{
+  "instance_type": "t3.micro",
+  "region": "eu-north-1",
+  "ami_id": "ami-xxxxxxxxxxxxxxx",
+  "key_name": "techeazy-key",
+  "repo_url": "https://github.com/sarc-nitish/tech_eazy_DevOps.git"
+}
+```
+
+---
+
+##  Final Notes
+
+ Both assignments completed and tested.
+ Auto-stop and cost-saving handled
+ Log successfully pushed to S3
+ Follows single-folder structure as per mentor’s guidance
+
+---
